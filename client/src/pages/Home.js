@@ -7,25 +7,14 @@ export default function Home() {
   const [filtered, setFiltered] = useState([]);
 
   const applyFilter = (list) => {
-  const query = (localStorage.getItem("searchQuery") || "").toLowerCase();
-  if (!query) {
-    setFiltered(list);
-  } else {
-    const filteredList = list.filter((p) => {
-      const name = p.name || p.title || ""; 
-      return name.toLowerCase().includes(query);
-    });
-    setFiltered(filteredList);
-  }
-};
-
+    const query = (localStorage.getItem("searchQuery") || "").toLowerCase();
+    if (!query) setFiltered(list);
+    else setFiltered(list.filter((p) => (p.name || p.title || "").toLowerCase().includes(query)));
+  };
 
   useEffect(() => {
     API.get("/products")
-      .then((res) => {
-        setProducts(res.data);
-        applyFilter(res.data);
-      })
+      .then((res) => { setProducts(res.data); applyFilter(res.data); })
       .catch((err) => console.log(err));
   }, []);
 
@@ -37,11 +26,7 @@ export default function Home() {
 
   return (
     <div className="product-grid">
-      {filtered.length === 0 ? (
-        <p>No products found.</p>
-      ) : (
-        filtered.map((p) => <ProductCard key={p._id} product={p} />)
-      )}
+      {filtered.length === 0 ? <p>No products found.</p> : filtered.map((p) => <ProductCard key={p._id} product={p} />)}
     </div>
   );
 }

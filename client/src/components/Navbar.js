@@ -34,7 +34,6 @@ export default function Navbar() {
 
     window.addEventListener("cartUpdated", updateCart);
     updateCart();
-
     return () => window.removeEventListener("cartUpdated", updateCart);
   }, [user]);
 
@@ -53,10 +52,7 @@ export default function Navbar() {
       </div>
 
       <div className="nav-right">
-        <Link to="/" className="nav-btn" title="Home">
-          <FaHome size={20} />
-        </Link>
-
+        <Link to="/" className="nav-btn" title="Home"><FaHome size={20} /></Link>
         <Link to="/cart" className="cart-icon" title="Cart">
           <FaShoppingCart size={20} />
           {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
@@ -64,12 +60,8 @@ export default function Navbar() {
 
         {user ? (
           <>
-            <Link to="/profile" className="nav-btn" title="Profile">
-              <FaUser size={20} />
-            </Link>
-            <button onClick={logout} className="logout-btn" title="Logout">
-              <FaSignOutAlt size={20} />
-            </button>
+            <Link to="/profile" className="nav-btn" title="Profile"><FaUser size={20} /></Link>
+            <button onClick={logout} className="logout-btn" title="Logout"><FaSignOutAlt size={20} /></button>
           </>
         ) : (
           <>

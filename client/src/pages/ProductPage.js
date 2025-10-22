@@ -14,9 +14,10 @@ export default function ProductPage(){
   },[id]);
 
   const addToCart = ()=>{
-    const cart=JSON.parse(localStorage.getItem('cart'))||[];
+    const cartKey = product?.sellerEmail ? `cart_${product.sellerEmail}` : "cart";
+    const cart=JSON.parse(localStorage.getItem(cartKey))||[];
     cart.push(product);
-    localStorage.setItem('cart',JSON.stringify(cart));
+    localStorage.setItem(cartKey,JSON.stringify(cart));
     alert('Product added to cart');
   };
 
@@ -30,12 +31,14 @@ export default function ProductPage(){
   return (
     <div className="product-detail">
       <img src={product.images[0]} alt={product.title}/>
-      <div>
+      <div className="product-info">
         <h2>{product.title}</h2>
         <p>{product.description}</p>
         <p>₹{product.price}</p>
-        <button onClick={addToCart}>Add to Cart</button>
-        <button onClick={buyNow}>Buy Now</button>
+        <div className="product-buttons">
+          <button onClick={addToCart}>Add to Cart</button>
+          <button onClick={buyNow}>Buy Now</button>
+        </div>
       </div>
     </div>
   );
