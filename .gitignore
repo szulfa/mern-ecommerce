@@ -1,0 +1,14 @@
+# Ignore dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Ignore environment and build files
+.env
+dist/
+build/
+
+# Ignore VSCode and system files
+.vscode/
+.DS_Store
+Thumbs.db
