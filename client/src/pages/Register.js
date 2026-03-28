@@ -1,82 +1,53 @@
-import React, { useState } from "react";
-import api from "../services/api";
-import { useAuth } from "../context/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import API from "../services/api";
 
-export default function Register() {
+function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("buyer"); // default role
-  const [error, setError] = useState(""); // 🔴 show red message
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const [role, setRole] = useState("buyer");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(""); // reset error before new submit
-
+  const handleRegister = async () => {
     try {
-      const res = await api.post("/auth/register", { name, email, password, role });
-      login(res.data.user, res.data.token);
+      console.log(name, email, password, role);
 
-      if (role === "seller") navigate("/seller");
-      else navigate("/");
+      const res = await API.post("/auth/register", {
+        name,
+        email,
+        password,
+        role,
+      });
+
+      alert("Registered Successfully");
+      window.location.href = "/login";
     } catch (err) {
-      console.error(err);
-      const msg = err?.response?.data?.message || "⚠️ User already exists. Please login instead.";
-
-      // ✅ Handle duplicate email gracefully
-      if (msg.toLowerCase().includes("exist")) {
-        setError("⚠️ User already exists. Please login instead.");
-      } else {
-        setError("❌ " + msg);
-      }
+      alert(err.response?.data?.msg || "Register Failed");
     }
   };
 
   return (
-    <div className="form-card">
+    <div style={{ padding: "50px" }}>
       <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          placeholder="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <select value={role} onChange={(e) => setRole(e.target.value)} required>
-          <option value="buyer">Buyer</option>
-          <option value="seller">Seller</option>
-        </select>
 
-          {error && (
-          <p style={{ color: "red", fontSize: "0.9rem", marginTop: "0.5rem" }}>
-            {error}
-          </p>
-        )}
+      <input placeholder="Name" onChange={(e)=>setName(e.target.value)} />
+      <br /><br />
 
-        <button type="submit" className="btn">
-          Register
-        </button>
-        <p style={{ marginTop: "1rem", fontSize: "0.9rem" }}>
-          Already registered? <Link to="/login">Login</Link>
-        </p>
-      </form>
+      <input placeholder="Email" onChange={(e)=>setEmail(e.target.value)} />
+      <br /><br />
+
+      <input type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} />
+      <br /><br />
+
+      <select onChange={(e)=>setRole(e.target.value)}>
+        <option value="buyer">Buyer</option>
+        <option value="seller">Seller</option>
+      </select>
+
+      <br /><br />
+
+      <button onClick={handleRegister}>Register</button>
     </div>
   );
 }
+
+export default Register;

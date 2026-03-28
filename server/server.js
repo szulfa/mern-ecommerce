@@ -8,7 +8,7 @@ import productRoutes from './routes/products.js';
 import uploadRoutes from './routes/uploads.js';
 
 const app = express();
-app.use(cors({ origin:"https://mern-ecommerce-alpha-gold.vercel.app", credentials: true }));
+app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
