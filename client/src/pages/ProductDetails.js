@@ -9,7 +9,7 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`https://mern-ecommerce-1-pgfs.onrender.com/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
@@ -51,7 +51,7 @@ export default function ProductDetails() {
     if (product.stock <= 0) return;
 
     try {
-      await fetch(`http://localhost:5000/api/products/buy/${product._id}`, {
+      await fetch(`https://mern-ecommerce-1-pgfs.onrender.com/api/products/buy/${product._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ qty: 1 }),

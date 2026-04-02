@@ -13,7 +13,7 @@ export default function Home() {
 
   // fetch products
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+    fetch("https://mern-ecommerce-1-pgfs.onrender.com/api/products")
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.log("Fetch error:", err));

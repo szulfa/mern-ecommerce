@@ -53,7 +53,7 @@ export default function SellerDashboard() {
   // ✅ DELETE PRODUCT (JWT protected)
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/products/${id}`, {
+      await fetch(`https://mern-ecommerce-1-pgfs.onrender.com/api/products/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${user.token}`, // send JWT

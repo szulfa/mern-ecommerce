@@ -7,7 +7,7 @@ export default function SearchPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+    fetch("https://mern-ecommerce-1-pgfs.onrender.com/api/products")
       .then((res) => res.json())
       .then((data) => {
         const filtered = data.filter((p) =>
