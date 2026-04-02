@@ -1,37 +1,46 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import ProductPage from './pages/ProductPage';
-import CartPage from './pages/CartPage';
-import SellerDashboard from './pages/SellerDashboard';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Navbar from './components/Navbar';
-import PrivateRoute from './components/PrivateRoute';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 import Checkout from "./pages/Checkout";
-import PaymentSuccess from "./pages/PaymentSuccess";
+import OrderSuccess from "./pages/OrderSuccess";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Orders from "./pages/Orders";
+import CartPage from "./pages/CartPage";
+import SellerDashboard from "./pages/SellerDashboard";
 import Profile from "./pages/Profile";
-import ForgotPassword from './pages/ForgotPassword';
+import ProductDetails from "./pages/ProductDetails";
+import SearchPage from "./pages/SearchPage";
+
 export default function App() {
   return (
     <>
-      <Navbar/>
-      <main className="container">
-        <Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/product/:id" element={<ProductPage/>}/>
-          <Route path="/cart" element={<PrivateRoute><CartPage/></PrivateRoute>}/>
-          <Route path="/seller" element={<PrivateRoute sellerOnly><SellerDashboard/></PrivateRoute>}/>
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/register" element={<Register/>}/>
-            <Route path="/checkout" element={<Checkout />} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/profile" element={<Profile />} />
-<Route path="/forgot-password" element={<ForgotPassword />} />
+      <Navbar />
 
+      <Routes>
+        {/* PUBLIC */}
+        <Route path="/" element={<Home />} />
+        <Route path="/search/:keyword" element={<SearchPage />} />
 
-        </Routes>
-      </main>
+        {/* AUTH */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* COMMON USER */}
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/cart" element={<CartPage />} />
+
+        {/* PRODUCT */}
+        <Route path="/product/:id" element={<ProductDetails />} />
+
+        {/* SELLER ONLY */}
+        <Route path="/seller-dashboard" element={<SellerDashboard />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
+
+      </Routes>
     </>
   );
 }

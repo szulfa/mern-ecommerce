@@ -1,53 +1,88 @@
-import { useState } from "react";
-import API from "../services/api";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
-function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("buyer");
+export default function Register() {
+  const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "buyer"
+  });
+
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      console.log(name, email, password, role);
-
-      const res = await API.post("/auth/register", {
-        name,
-        email,
-        password,
-        role,
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
       });
 
-      alert("Registered Successfully");
-      window.location.href = "/login";
-    } catch (err) {
-      alert(err.response?.data?.msg || "Register Failed");
+      const data = await res.json();
+
+      if (res.ok) {
+        navigate("/login");
+      } else {
+        setError(data.message);
+      }
+    } catch {
+      setError("Server error");
     }
   };
 
   return (
-    <div style={{ padding: "50px" }}>
-      <h2>Register</h2>
+    <div className="auth">
+      <div className="auth-box">
+        <h2>Register</h2>
 
-      <input placeholder="Name" onChange={(e)=>setName(e.target.value)} />
-      <br /><br />
+        {error && <p className="error">{error}</p>}
 
-      <input placeholder="Email" onChange={(e)=>setEmail(e.target.value)} />
-      <br /><br />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Name"
+            onChange={(e) =>
+              setFormData({ ...formData, name: e.target.value })
+            }
+          />
 
-      <input type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} />
-      <br /><br />
+          <input
+            type="email"
+            placeholder="Email"
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
+          />
 
-      <select onChange={(e)=>setRole(e.target.value)}>
-        <option value="buyer">Buyer</option>
-        <option value="seller">Seller</option>
-      </select>
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) =>
+              setFormData({ ...formData, password: e.target.value })
+            }
+          />
 
-      <br /><br />
+          <select
+            onChange={(e) =>
+              setFormData({ ...formData, role: e.target.value })
+            }
+          >
+            <option value="buyer">Buyer</option>
+            <option value="seller">Seller</option>
+          </select>
 
-      <button onClick={handleRegister}>Register</button>
+          <button type="submit">Register</button>
+        </form>
+
+        <div className="auth-switch">
+          Already have account? <Link to="/login">Login</Link>
+        </div>
+      </div>
     </div>
   );
 }
-
-export default Register;

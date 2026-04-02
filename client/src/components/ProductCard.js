@@ -5,24 +5,19 @@ export default function ProductCard({ product }) {
   const navigate = useNavigate();
 
   return (
-    <div className="product-card" onClick={() => navigate(`/product/${product._id}`)}>
-      <img src={product.imageUrl} alt={product.name} />
-
-      <h4>{product.name}</h4>
-
-      <p className="desc">{product.description}</p>
-
-      <h3 className="price">₹{product.price}</h3>
-
-      <button
-        className="btn-add"
-        onClick={(e) => {
-          e.stopPropagation();
-          alert("Added to cart");
+    <div
+      className="card"
+      onClick={() => navigate(`/product/${product._id}`)}
+      style={{ cursor: "pointer" }}
+    >
+      <img
+        src={product.image}
+        alt={product.name}
+        onError={(e) => {
+          e.target.src = "https://via.placeholder.com/150";
         }}
-      >
-        Add to Cart
-      </button>
-    </div>
+      />
+
+      </div>
   );
 }

@@ -1,106 +1,105 @@
 import React, { useState } from "react";
-import API from "../services/api";
+import "./ProductForm.css";
 
-export default function ProductForm({ onProductAdded }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    price: "",
-    stock: "",
-    image: null,
-  });
-
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
-  };
+export default function ProductForm() {
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [stock, setStock] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [category, setCategory] = useState("men");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    const productData = {
+      name,
+      price,
+      stock,
+      description,
+      image,   // ✅ IMPORTANT FIX
+      category,
+      seller: user?._id,
+    };
+
     try {
-      console.log("Uploading image...");
-      const imgData = new FormData();
-      imgData.append("image", formData.image);
+      const res = await fetch("http://localhost:5000/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(productData),
+      });
 
-      const uploadRes = await API.post("/uploads", imgData);
-      console.log("Upload response:", uploadRes.data);
+      if (!res.ok) {
+        alert("❌ Failed to add product");
+        return;
+      }
 
-      const productData = {
-        name: formData.name,
-        description: formData.description,
-        price: formData.price,
-        stock: formData.stock,
-        imageUrl: uploadRes.data.url,
-      };
+      alert("🎉 Product Added Successfully!");
 
-      console.log("Sending product:", productData);
-
-      const res = await API.post("/products", productData);
-      console.log("Product added:", res.data);
-
-      //alert("Product added successfully!");
-      setFormData({ name: "", description: "", price: "", stock: "", image: null });
-      if (onProductAdded) onProductAdded();
+      // reset form
+      setName("");
+      setPrice("");
+      setStock("");
+      setDescription("");
+      setImage("");
+      setCategory("men");
     } catch (err) {
-      console.error("Add product error:", err);
-      alert("Failed to add product. Please check if you are logged in as a seller.");
-    } finally {
-      setLoading(false);
+      console.log(err);
+      alert("❌ Server Error");
     }
   };
 
   return (
-    <form className="product-form" onSubmit={handleSubmit}>
-      <h3>Add New Product</h3>
+    <div className="product-form-page">
+      <form className="product-form" onSubmit={handleSubmit}>
+        <h2>Add New Product</h2>
 
-      <input
-        type="text"
-        name="name"
-        placeholder="Product Name"
-        value={formData.name}
-        onChange={handleChange}
-        required
-      />
-      <textarea
-        name="description"
-        placeholder="Product Description"
-        value={formData.description}
-        onChange={handleChange}
-        required
-      ></textarea>
-      <input
-        type="number"
-        name="price"
-        placeholder="Price"
-        value={formData.price}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="number"
-        name="stock"
-        placeholder="Stock Quantity"
-        value={formData.stock}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="file"
-        name="image"
-        accept="image/*"
-        onChange={handleChange}
-        required
-      />
+        <input
+          placeholder="Product Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-      <button type="submit" disabled={loading}>
-        {loading ? "Uploading..." : "Add Product"}
-      </button>
-    </form>
+        <input
+          placeholder="Price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
+
+        <input
+          placeholder="Stock"
+          value={stock}
+          onChange={(e) => setStock(e.target.value)}
+        />
+
+        <input
+          placeholder="Image URL (Cloudinary or direct link)"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+        />
+
+        <textarea
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="men">Men</option>
+          <option value="women">Women</option>
+          <option value="kids">Kids</option>
+          <option value="groceries">Groceries</option>
+        </select>
+
+        <button type="submit">Add Product</button>
+      </form>
+    </div>
   );
 }

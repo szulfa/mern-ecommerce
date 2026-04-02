@@ -5,17 +5,22 @@ import API from "../services/api";
 export default function ProductPage() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    API.get(`/products`)
+    API.get(`/products/${id}`)
       .then(res => {
-        const found = res.data.find(p => p._id === id);
-        setProduct(found);
+        setProduct(res.data);
+        setLoading(false);
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        setLoading(false);
+      });
   }, [id]);
 
-  if (!product) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
+  if (!product) return <p>Product not found</p>;
 
   return (
     <div className="product-detail">
