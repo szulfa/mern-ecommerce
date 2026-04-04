@@ -80,7 +80,22 @@ body {
 .card:hover {
   transform: translateY(-3px);
 }
-
+.remember-me {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* keeps everything on left */
+  gap: 4px; /* small space between checkbox and text */
+  margin-top: 10px;
+  font-size: 14px;
+}
+.auth-box button {
+  width: 100%;
+  margin-top: 15px;
+}
+.auth-box p {
+  text-align: center;
+  margin-top: 10px;
+}
 .card img {
   width: 100%;        /* ✅ take full card width */
   height: 200px;

@@ -31,22 +31,23 @@ export default function Checkout() {
 
     // ✅ CREATE SEPARATE ORDER PER ITEM (your existing logic)
     const newOrders = items.map((item) => {
-      const p = item.product || item;
+  const p = item.product || item;
 
-      return {
-        id: Date.now() + Math.random(),
-       product: {
-  name: p.name,
-  price: p.price,
-  image: p.image || p.imageUrl || p.images?.[0] || "",
-  _id: p._id,
-  id: p.id,
-},
-        address,
-        payment,
-        date: new Date().toLocaleString(),
-      };
-    });
+  return {
+    id: Date.now() + Math.random(),
+    product: {
+      name: p.name,
+      price: p.price,
+      image: p.image || p.imageUrl || p.images?.[0] || "",
+      _id: p._id,
+      id: p.id,
+    },
+    quantity: item.qty || 1,   // ✅ ADD THIS LINE
+    address,
+    payment,
+    date: new Date().toLocaleString(),
+  };
+});
 
     const updatedOrders = [...orders, ...newOrders];
     localStorage.setItem(orderKey, JSON.stringify(updatedOrders));

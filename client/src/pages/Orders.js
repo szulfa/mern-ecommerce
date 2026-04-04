@@ -61,7 +61,10 @@ export default function Orders() {
 
               <div>
                 <h3>{product.name}</h3>
-                <p>₹{product.price}</p>
+                <p>
+  {order.quantity || 1} × ₹{product.price} = ₹
+  {(order.quantity || 1) * product.price}
+</p>
                 <p>Payment: {order.payment}</p>
                 <p>Address: {order.address}</p>
                 <p>Date: {order.date}</p>

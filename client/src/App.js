@@ -12,6 +12,7 @@ import SellerDashboard from "./pages/SellerDashboard";
 import Profile from "./pages/Profile";
 import ProductDetails from "./pages/ProductDetails";
 import SearchPage from "./pages/SearchPage";
+import ForgotPassword from "./pages/ForgotPassword";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         {/* PUBLIC */}
         <Route path="/" element={<Home />} />
         <Route path="/search/:keyword" element={<SearchPage />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* AUTH */}
         <Route path="/login" element={<Login />} />
