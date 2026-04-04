@@ -21,7 +21,7 @@ export default function ProductForm() {
       description,
       image,   // ✅ IMPORTANT FIX
       category,
-      seller: user?._id,
+      seller: user?._id || user?.user?._id,
     };
 
     try {

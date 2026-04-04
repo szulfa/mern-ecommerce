@@ -27,25 +27,16 @@ export default function SellerDashboard() {
 
   // ✅ FETCH PRODUCTS (JWT protected)
   useEffect(() => {
-    if (!user) return;
+  if (!user) return;
 
-    fetch("http://localhost:5000/api/products", {
-      headers: {
-        Authorization: `Bearer ${user.token}`, // send JWT
-      },
+  fetch("https://mern-ecommerce-1-pgfs.onrender.com/api/products"
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      setProducts(Array.isArray(data) ? data : []);
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("SELLER PRODUCTS:", data);
-        setProducts(Array.isArray(data) ? data : []);
-      })
-      .catch((err) => {
-        console.log(err);
-        setProducts([]);
-      });
-  }, [user, refresh]);
-
-  // ✅ REFRESH AFTER ADD
+    .catch(() => setProducts([]));
+}, [user, refresh]);  // ✅ REFRESH AFTER ADD
   const handleProductAdded = () => {
     setRefresh((prev) => !prev);
   };

@@ -6,6 +6,7 @@ import "./Home.css";
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("all");
+  const [loading, setLoading] = useState(true); // ✅ added
 
   const location = useLocation();
   const query = new URLSearchParams(location.search);
@@ -15,8 +16,14 @@ export default function Home() {
   useEffect(() => {
     fetch("https://mern-ecommerce-1-pgfs.onrender.com/api/products")
       .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((err) => console.log("Fetch error:", err));
+      .then((data) => {
+        setProducts(data);
+        setLoading(false); // ✅ added
+      })
+      .catch((err) => {
+        console.log("Fetch error:", err);
+        setLoading(false); // ✅ added
+      });
   }, []);
 
   // reset category on page change
@@ -79,7 +86,9 @@ export default function Home() {
 
       {/* PRODUCTS */}
       <div className="product-grid">
-        {filteredProducts.length > 0 ? (
+        {loading ? (
+          <div className="loader"></div>
+        ) : filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))
