@@ -28,7 +28,7 @@ export default function Register() {
       if (res.ok) {
         navigate("/login");
       } else {
-        setError(data.message);
+        setError(data.msg || data.message || "Registration failed");
       }
     } catch {
       setError("Server error");
